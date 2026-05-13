@@ -1,0 +1,24 @@
+// This is your Prisma schema file.
+// Prisma 7: connection URL is configured in prisma.config.ts, not here.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Stores admin-controlled overrides for Cloudbeds add-on items.
+// The canonical item list (name, category, price) always comes from the Cloudbeds API.
+// Only mutable state (active toggle, image, display order) lives here.
+model AddonOverride {
+  cloudbeds_item_id String   @id
+  active            Boolean  @default(true)
+  image_url         String?
+  display_order     Int?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@map("addon_overrides")
+}

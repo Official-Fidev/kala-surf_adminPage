@@ -1,0 +1,16 @@
+[
+  { "id": "addon-001", "order": 1,  "active": false, "item_name": "Transportation RSV 7 days",    "addon_name": "",                          "charge_type": "Per Reservation",      "max_qty": null, "image_url": null },
+  { "id": "addon-002", "order": 2,  "active": true,  "item_name": "Surfboard Rental",               "addon_name": "Surf Board Rental",         "charge_type": "Per Guest Per Night",  "max_qty": null, "image_url": null },
+  { "id": "addon-003", "order": 3,  "active": true,  "item_name": "Private Surf Session",           "addon_name": "Private Surf Coaching",     "charge_type": "Quantity",             "max_qty": null, "image_url": null },
+  { "id": "addon-004", "order": 4,  "active": true,  "item_name": "1-week Surf Video Package",      "addon_name": "1-Week Surf Video Package", "charge_type": "Per Guest",            "max_qty": null, "image_url": null },
+  { "id": "addon-005", "order": 5,  "active": true,  "item_name": "Airport Pick Up",                "addon_name": "Airport Pick Up Transfer",  "charge_type": "Per Reservation",      "max_qty": null, "image_url": null },
+  { "id": "addon-006", "order": 6,  "active": true,  "item_name": "Airport Drop Off",               "addon_name": "Airport Drop Transfer",     "charge_type": "Per Reservation",      "max_qty": null, "image_url": null },
+  { "id": "addon-007", "order": 7,  "active": true,  "item_name": "Scooter Rental",                 "addon_name": "Scooter Rental with Surf Rack", "charge_type": "Quantity",         "max_qty": null, "image_url": null },
+  { "id": "addon-008", "order": 8,  "active": true,  "item_name": "Full Board",                     "addon_name": "Full Board",                "charge_type": "Per Guest Per Night",  "max_qty": null, "image_url": null },
+  { "id": "addon-009", "order": 9,  "active": true,  "item_name": "3-Day Surf Video Package",       "addon_name": "3-Day Surf Video Package",  "charge_type": "Per Guest",            "max_qty": null, "image_url": null },
+  { "id": "addon-010", "order": 10, "active": true,  "item_name": "Half Board",                     "addon_name": "Half Board",                "charge_type": "Per Guest Per Night",  "max_qty": null, "image_url": null },
+  { "id": "addon-011", "order": 11, "active": true,  "item_name": "Custom 8o Surfboard by Eko",     "addon_name": "Custom 8o Surfboard by Eko","charge_type": "Per Guest",            "max_qty": null, "image_url": null },
+  { "id": "addon-012", "order": 12, "active": true,  "item_name": "Visa Extension",                 "addon_name": "Visa Service All Year",     "charge_type": "Per Guest",            "max_qty": null, "image_url": null },
+  { "id": "addon-013", "order": 13, "active": true,  "item_name": "Ubud Day Trip",                  "addon_name": "Ubud Day Trip",             "charge_type": "Per Reservation",      "max_qty": null, "image_url": null },
+  { "id": "addon-014", "order": 14, "active": false, "item_name": "Semi Private Surf Session",      "addon_name": "Semi Private Surf Coaching","charge_type": "Per Guest Per Night",  "max_qty": null, "image_url": null }
+]
