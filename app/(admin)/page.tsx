@@ -15,6 +15,11 @@ interface Addon {
   addon_name: string; charge_type: string; max_qty: number | null; image_url: string | null;
 }
 
+interface ToastMessage {
+  id: number;
+  message: string;
+}
+
 /* ── Toggle switch ───────────────────────────────────────────── */
 function Toggle({ checked, disabled, onChange }: { checked: boolean; disabled: boolean; onChange: () => void }) {
   return (
@@ -81,27 +86,23 @@ function ImageCell({
 }
 
 /* ── Addon Row ───────────────────────────────────────────────── */
-function AddonRow({ addon, index, onSaved }: { addon: Addon; index: number; onSaved: () => void }) {
-  const [active, setActive] = useState(addon.active);
+function AddonRow({ addon, index, onSaved, onToggle }: { addon: Addon; index: number; onSaved: () => void; onToggle: () => Promise<void> }) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageRemoved, setImageRemoved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [toggling, setToggling] = useState(false);
 
   useEffect(() => {
-    setActive(addon.active);
     setImageFile(null);
     setImageRemoved(false);
   }, [addon]);
 
   const preview = imageFile ? URL.createObjectURL(imageFile) : (imageRemoved ? null : addon.image_url);
-  const hasChanges = active !== addon.active || imageFile !== null || imageRemoved;
+  const hasChanges = imageFile !== null || imageRemoved;
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      if (active !== addon.active) {
-        await fetch(`/api/addons/${addon.id}/toggle`, { method: "PATCH" });
-      }
       if (imageFile) {
         const fd = new FormData();
         fd.append("image", imageFile);
@@ -116,9 +117,14 @@ function AddonRow({ addon, index, onSaved }: { addon: Addon; index: number; onSa
   };
 
   const handleRevert = () => {
-    setActive(addon.active);
     setImageFile(null);
     setImageRemoved(false);
+  };
+
+  const handleToggleClick = async () => {
+    setToggling(true);
+    await onToggle();
+    setToggling(false);
   };
 
   return (
@@ -133,7 +139,7 @@ function AddonRow({ addon, index, onSaved }: { addon: Addon; index: number; onSa
         </div>
       </td>
       <td className="px-5 py-3.5">
-        <Toggle checked={active} disabled={saving} onChange={() => setActive(!active)} />
+        <Toggle checked={addon.active} disabled={saving || toggling} onChange={handleToggleClick} />
       </td>
       <td className="px-5 py-3.5">
         <span className="font-medium whitespace-nowrap" style={{ color: "#000" }}>{addon.item_name}</span>
@@ -195,8 +201,17 @@ export default function AddonsPage() {
   const [addons, setAddons] = useState<Addon[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
   // Avoid SSR/client hydration mismatch for window.location
   const [origin, setOrigin] = useState("");
+
+  const addToast = (message: string) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 4000);
+  };
   useEffect(() => { setOrigin(window.location.origin); }, []);
 
   const fetchAddons = async () => {
@@ -210,6 +225,19 @@ export default function AddonsPage() {
     }
   };
 
+  const handleToggle = async (addon: Addon) => {
+    try {
+      const res = await fetch(`/api/addons/${addon.id}/toggle`, { method: "PATCH" });
+      const data = await res.json();
+      if (data.success) {
+        setAddons(prev => prev.map(a => a.id === addon.id ? { ...a, active: data.data.active } : a));
+        addToast(`Status marked as ${data.data.active ? 'Active' : 'Inactive'}.`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => { fetchAddons(); }, []);
 
   const handleRefresh = () => { setRefreshing(true); fetchAddons(); };
@@ -218,6 +246,17 @@ export default function AddonsPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6" style={MF}>
+
+      {/* Toast Notifications */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50 pointer-events-none">
+        {toasts.map(t => (
+          <div key={t.id} className="animate-fade-in-up flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg pointer-events-auto"
+            style={{ backgroundColor: "#FBF8F6", border: "1px solid #F2E8E0" }}>
+            <CheckCircle2 size={16} color="#568275" />
+            <span className="text-sm font-medium" style={{ color: "#2f5069", ...MF }}>{t.message}</span>
+          </div>
+        ))}
+      </div>
 
       {/* Header */}
       <header className="animate-fade-in-up">
@@ -306,7 +345,7 @@ export default function AddonsPage() {
                     </tr>
                   ))
                 : addons.map((addon, i) => (
-                    <AddonRow key={addon.id} addon={addon} index={i} onSaved={fetchAddons} />
+                    <AddonRow key={addon.id} addon={addon} index={i} onSaved={fetchAddons} onToggle={() => handleToggle(addon)} />
                   ))}
             </tbody>
           </table>
