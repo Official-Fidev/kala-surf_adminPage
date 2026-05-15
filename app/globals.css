@@ -7,27 +7,29 @@
 
 /* ─── Kala Design Tokens (@theme → generates all utility classes) ─ */
 @theme {
-  /* ── New Design System tokens (from landing page spec) ─────── */
-  --color-ks-bg:          #FBF8F6;   /* Page bg, header, sidebar          */
-  --color-ks-border:      #F2E8E0;   /* Header border, section dividers    */
-  --color-ks-primary:     #000000;   /* Text primary, logo, active links   */
-  --color-ks-secondary:   #64748b;   /* Nav links, sub-headers (slate-500) */
-  --color-ks-accent:      #E3A564;   /* Icon highlights, notification dot  */
-  --color-ks-surface:     #FBF8F6;   /* Container backgrounds, inputs      */
-  --color-ks-outline:     #94a3b8;   /* Placeholder, muted, label-caps     */
-  --color-ks-hover-bg:    #F0EAE4;   /* Nav hover state                    */
-
-  /* ── Legacy brand tokens (kept for page content colours) ───── */
-  --color-kala-green:      #568275;
-  --color-kala-blue:       #2f5069;
-  --color-kala-gold:       #E3A564;
-  --color-kala-white:      #FBF8F6;
-  --color-kala-waves:      #faebe3;
-  --color-kala-beige:      #FBF8F6;
-  --color-kala-beige-dark: #F2E8E0;
-  --color-kala-body:       #64748b;
-  --color-kala-black:      #000000;
-  --color-kala-info:       #007aff;
+  /* ── New Design System tokens ──────────────────────────────── */
+  --color-background: #fcf9f7;
+  --color-foreground: #1b1c1b;
+  --color-primary: #153951;
+  --color-on-primary: #ffffff;
+  --color-secondary: #645d57;
+  --color-on-secondary: #ffffff;
+  --color-surface: #fcf9f7;
+  --color-on-surface: #1b1c1b;
+  --color-outline: #73787d;
+  --color-outline-variant: #c2c7cd;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f6f3f1;
+  --color-surface-container: #f0edeb;
+  --color-surface-container-high: #eae8e6;
+  --color-surface-container-highest: #e5e2e0;
+  --color-primary-container: #2f5069;
+  --color-on-primary-container: #a0c2df;
+  --color-secondary-container: #ebe1d9;
+  --color-on-secondary-container: #6a635d;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-success: #15803d;
 
   /* ── Fonts ──────────────────────────────────────────────────── */
   --font-display:    "CabinetGrotesk", Impact, sans-serif;
@@ -41,7 +43,7 @@
   /* ── Shadows ────────────────────────────────────────────────── */
   --shadow-card:        0 1px 8px 0 rgb(0 0 0 / 0.06);
   --shadow-card-hover:  0 4px 20px 0 rgb(0 0 0 / 0.10);
-  --shadow-sidebar:     1px 0 0 0 #F2E8E0;   /* hairline right border */
+  --shadow-sidebar:     "1px 0 0 0 var(--color-surface-container-high)";   /* hairline right border */
 
   /* ── Border radius ──────────────────────────────────────────── */
   --radius-xl2: 1rem;
@@ -68,13 +70,14 @@
 
 /* ─── Raw CSS custom properties (for use in plain CSS rules) ─── */
 :root {
-  --ks-bg:       #FBF8F6;
-  --ks-border:   #F2E8E0;
-  --ks-primary:  #000000;
-  --ks-secondary:#64748b;
-  --ks-accent:   #E3A564;
-  --ks-outline:  #94a3b8;
-  --ks-hover-bg: #F0EAE4;
+  --background: #fcf9f7;
+  --foreground: #1b1c1b;
+  --foreground-rgb: 27, 28, 27;
+  --primary: #153951;
+  --surface: #fcf9f7;
+  --outline: #73787d;
+  --surface-container: #f0edeb;
+  --surface-container-high: #eae8e6;
 }
 
 /* ─── Base ───────────────────────────────────────────────────── */
@@ -86,22 +89,22 @@ html {
 }
 
 body {
-  background-color: var(--ks-bg);
-  color: var(--ks-primary);
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: "Manrope", Arial, sans-serif;
 }
 
 /* ─── Header glass (scroll-triggered) ───────────────────────── */
 .header-glass {
-  background-color: rgba(251, 248, 246, 0.80) !important;
+  background-color: rgba(252, 249, 247, 0.8) !important;
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border-bottom-color: #F2E8E0 !important;
+  border-bottom-color: var(--surface-container-high) !important;
 }
 
 /* ─── Skeleton shimmer ───────────────────────────────────────── */
 .skeleton {
-  background: linear-gradient(90deg, #F2E8E0 25%, #FBF8F6 50%, #F2E8E0 75%);
+  background: linear-gradient(90deg, var(--surface-container-high) 25%, var(--background) 50%, var(--surface-container-high) 75%);
   background-size: 800px 100%;
   animation: shimmer 1.4s ease-in-out infinite;
   border-radius: 6px;
@@ -110,16 +113,16 @@ body {
 /* ─── Sidebar active nav link ────────────────────────────────── */
 /* Active: black left border, bold, italic — per spec */
 .nav-active {
-  border-left: 2px solid var(--ks-primary);
-  background-color: rgba(0, 0, 0, 0.04);
-  color: var(--ks-primary);
+  border-left: 2px solid var(--primary);
+  background-color: rgba(var(--foreground-rgb), 0.04);
+  color: var(--foreground);
   font-weight: 700;
   font-style: italic;
 }
 
 /* ─── Focus ring ─────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--ks-accent);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -129,5 +132,5 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--ks-outline);
+  color: var(--outline);
 }

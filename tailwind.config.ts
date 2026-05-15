@@ -17,25 +17,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // ── Core brand palette ──────────────────────────────────
-        "kala-green":      "#568275",
-        "kala-blue":       "#2f5069",
-        "kala-gold":       "#e3a564",
-
-        // ── Backgrounds ─────────────────────────────────────────
-        "kala-white":      "#fff8ef",
-        "kala-waves":      "#faebe3",
-
-        // ── Surfaces / card elevations ───────────────────────────
-        "kala-beige":      "#fbf8f6",
-        "kala-beige-dark": "#ede0d8",
-
-        // ── Text ─────────────────────────────────────────────────
-        "kala-body":       "#333333",
-        "kala-black":      "#161616",
-
-        // ── System ───────────────────────────────────────────────
-        "kala-info":       "#007aff",
+        // ── New Design System ───────────────────────────────────
+        background: '#fcf9f7',
+        foreground: '#1b1c1b',
+        primary: '#153951',
+        'on-primary': '#ffffff',
+        secondary: '#645d57',
+        'on-secondary': '#ffffff',
+        surface: '#fcf9f7',
+        'on-surface': '#1b1c1b',
+        outline: '#73787d',
+        'outline-variant': '#c2c7cd',
+        'surface-container-lowest': '#ffffff',
+        'surface-container-low': '#f6f3f1',
+        'surface-container': '#f0edeb',
+        'surface-container-high': '#eae8e6',
+        'surface-container-highest': '#e5e2e0',
+        'primary-container': '#2f5069',
+        'on-primary-container': '#a0c2df',
+        'secondary-container': '#ebe1d9',
+        'on-secondary-container': '#6a635d',
+        error: '#ba1a1a',
+        'on-error': '#ffffff',
+        success: '#15803d',
       },
 
       fontFamily: {
