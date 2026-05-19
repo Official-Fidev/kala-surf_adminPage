@@ -15,6 +15,18 @@ Uploaded images for add-ons are saved directly to the local filesystem at `publi
 - Migrate to a **Cloud Storage** provider such as AWS S3, Cloudinary, Vercel Blob, or Supabase Storage.
 - Update the image upload API to stream files directly to the cloud provider and store the resulting URL in PostgreSQL instead of a local path.
 
+## 2. Image Compression & Optimization (Pending)
+
+**Current State:**
+Images uploaded via the dashboard are saved in their original format and size directly via `fs.writeFileSync`.
+
+**Risk:**
+Uploading 5MB+ images will cause slow loading times on the public booking website, degrading the user experience and SEO.
+
+**Recommendation:**
+- Previously, we attempted to integrate **Sharp** to automatically resize and convert uploads to `.webp`. However, the library was removed because the specific VPS used for deployment runs on an older CPU architecture that does not support the AVX instructions (`v2 microarchitecture`) required by Sharp's pre-compiled Linux binaries.
+- Once the application is moved to a modern Cloud Server, Vercel, or after Sharp is built from source (`npm rebuild --build-from-source sharp`), the compression logic can be safely re-added.
+
 ---
 
 ## ✅ Recently Resolved / Implemented
@@ -30,9 +42,6 @@ The following technical debt items have been recently addressed and are now part
 ### 3. Cloudbeds API Rate Limiting & Caching
 - **Resolved:** Implemented Next.js data caching (`next: { revalidate: 900 }`) in `lib/cloudbeds.ts`. The Cloudbeds API response is now cached for 15 minutes to prevent rate limiting and improve frontend performance during high traffic.
 
-### 4. Image Compression & Optimization
-- **Resolved:** Integrated `sharp` into the image upload pipeline. Uploaded images are automatically resized (max width 800px) and converted to highly optimized `.webp` format (80% quality) before being saved to the local disk.
 
----
 
 > **Note:** The pending Image Storage Strategy upgrade is not a critical blocker if the MVP is hosted on a secure, persistent VPS. However, it is an essential upgrade if the hosting architecture shifts to serverless.
