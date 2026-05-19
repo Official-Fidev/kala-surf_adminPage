@@ -256,3 +256,4 @@ The project follows a standard Next.js App Router structure. Key files and direc
 
 - **API Reference:** For detailed information on the available API endpoints, see [docs/API.md](docs/API.md).
 - **Environment Variables:** For a deep-dive on configuring the application, see [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md).
+- **Future Development:** For technical debt, security improvements, and scalability recommendations before going to production, see [docs/FUTURE_DEVELOPMENT.md](docs/FUTURE_DEVELOPMENT.md).

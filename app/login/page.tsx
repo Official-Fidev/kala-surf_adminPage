@@ -47,10 +47,7 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center mb-10">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-            style={{ backgroundColor: "rgba(227,165,100,0.15)", border: "1px solid rgba(227,165,100,0.3)" }}>
-            <Waves size={24} strokeWidth={1.75} style={{ color: "#E3A564" }} />
-          </div>
+          <img src="/logo.svg" alt="Kala Surf" className="w-16 h-16 rounded-xl object-contain mb-4" />
           <h1 className="text-2xl font-bold" style={{ ...CF, color: "#000" }}>Kala Admin</h1>
           <p className="mt-1 text-sm" style={{ ...MF, color: "#94a3b8" }}>Sign in to manage your add-ons</p>
         </div>

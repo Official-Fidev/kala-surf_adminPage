@@ -18,18 +18,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       >
         {/* Brand wordmark */}
         <div className="px-6 py-6 shrink-0" style={{ borderBottom: "1px solid #F2E8E0" }}>
-          <span
-            className="text-xl font-bold tracking-tight"
-            style={{ fontFamily: "'CabinetGrotesk', Impact, sans-serif", color: "#000" }}
-          >
-            Kala Admin
-          </span>
-          <p
-            className="mt-0.5"
-            style={{ fontFamily: "Manrope, Arial, sans-serif", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#94a3b8" }}
-          >
-            Surf School · Bali
-          </p>
+          <div className="flex items-center gap-3">
+            <img src="/logo.svg" alt="Kala Surf" className="w-9 h-9 rounded object-contain" />
+            <div>
+              <span
+                className="text-xl font-bold tracking-tight"
+                style={{ fontFamily: "'CabinetGrotesk', Impact, sans-serif", color: "#000" }}
+              >
+                Kala Admin
+              </span>
+              <p
+                className="mt-0.5"
+                style={{ fontFamily: "Manrope, Arial, sans-serif", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#94a3b8" }}
+              >
+                Surf School · Bali
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Nav */}

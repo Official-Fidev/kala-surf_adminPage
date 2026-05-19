@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   RefreshCw, Upload, Trash2, CheckCircle2, XCircle,
   ImageIcon, ChevronUp, ChevronDown, Copy, Check,
+  Search, ChevronLeft, ChevronRight
 } from "lucide-react";
 
 const CF = { fontFamily: "'CabinetGrotesk', Impact, sans-serif" };
@@ -195,6 +196,10 @@ export default function AddonsPage() {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   // Avoid SSR/client hydration mismatch for window.location
   const [origin, setOrigin] = useState("");
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const addToast = (message: string) => {
     const id = Date.now();
@@ -234,6 +239,16 @@ export default function AddonsPage() {
   const handleRefresh = () => { setRefreshing(true); fetchAddons(); };
 
   const activeCount = addons.filter(a => a.active).length;
+
+  const filteredAddons = addons.filter(addon => 
+    addon.item_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (addon.addon_name && addon.addon_name.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+  
+  const totalPages = Math.max(1, Math.ceil(filteredAddons.length / itemsPerPage));
+  const paginatedAddons = filteredAddons.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => { setCurrentPage(1); }, [searchQuery]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6" style={MF}>
@@ -302,13 +317,26 @@ export default function AddonsPage() {
             <h2 className="font-bold text-lg text-foreground" style={CF}>Items</h2>
             <p className="label-caps mt-0.5">Toggle active status · upload images</p>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-primary/10 text-primary" style={MF}>
-              <CheckCircle2 size={11} />{activeCount} active
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-surface-container text-on-secondary-container border border-surface-container-high" style={MF}>
-              <XCircle size={11} />{addons.length - activeCount} inactive
-            </span>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
+              <input
+                type="text"
+                placeholder="Search items..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-1.5 text-sm rounded-lg border border-surface-container-high bg-surface focus:outline-none focus:border-primary transition-colors"
+                style={MF}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-primary/10 text-primary" style={MF}>
+                <CheckCircle2 size={11} />{activeCount} active
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-surface-container text-on-secondary-container border border-surface-container-high" style={MF}>
+                <XCircle size={11} />{addons.length - activeCount} inactive
+              </span>
+            </div>
           </div>
         </div>
 
@@ -332,20 +360,46 @@ export default function AddonsPage() {
                       ))}
                     </tr>
                   ))
-                : addons.map((addon, i) => (
-                    <AddonRow key={addon.id} addon={addon} index={i} onSaved={fetchAddons} onToggle={() => handleToggle(addon)} />
+                : paginatedAddons.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="px-5 py-8 text-center text-on-secondary-container text-sm">
+                        No items found matching your search.
+                      </td>
+                    </tr>
+                  ) : paginatedAddons.map((addon, i) => (
+                    <AddonRow key={addon.id} addon={addon} index={i + (currentPage - 1) * itemsPerPage} onSaved={fetchAddons} onToggle={() => handleToggle(addon)} />
                   ))}
             </tbody>
           </table>
         </div>
 
         <div className="px-6 py-4 flex items-center justify-between border-t border-surface-container-high">
-          <p className="label-caps">
-            <span className="text-on-secondary-container font-semibold">{addons.length}</span> items from Cloudbeds
+          <p className="label-caps flex items-center gap-2">
+            <span className="text-on-secondary-container font-semibold">{filteredAddons.length}</span> items
+            {searchQuery && <span className="text-outline lowercase">(filtered from {addons.length})</span>}
           </p>
-          <p className="text-xs text-outline" style={MF}>
-            Make changes and click Send to apply them
-          </p>
+          
+          {totalPages > 1 && (
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-1 rounded-lg text-on-secondary-container hover:bg-surface-container disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-sm px-2 text-on-secondary-container font-medium" style={MF}>
+                {currentPage} / {totalPages}
+              </span>
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-1 rounded-lg text-on-secondary-container hover:bg-surface-container disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </div>

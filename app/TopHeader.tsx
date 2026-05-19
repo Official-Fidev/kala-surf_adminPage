@@ -39,7 +39,14 @@ export default function TopHeader() {
       }}
     >
       {/* ── Search ────────────────────────────────────────────── */}
-      <div className="relative w-52 md:w-72">
+      {/* 
+        [NOTE FOR FUTURE DEVELOPMENT]: 
+        The Global Search bar below is temporarily hidden using the 'invisible' class.
+        This preserves the header layout (justify-between) while hiding it from users.
+        When you are ready to develop the Global Search feature (e.g., for bookings, 
+        students, etc.), simply remove the 'invisible' class from the div below.
+      */}
+      <div className="relative w-52 md:w-72 invisible">
         <label htmlFor="global-search" className="sr-only">
           Search bookings and students
         </label>
@@ -68,24 +75,7 @@ export default function TopHeader() {
 
       {/* ── Right cluster ─────────────────────────────────────── */}
       <div className="flex items-center gap-3">
-        {/* Notifications */}
-        <button
-          aria-label="View notifications"
-          className="relative p-2 rounded-lg transition-colors duration-300"
-          style={{ color: "#64748b" }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F0EAE4")}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
-        >
-          <Bell size={17} strokeWidth={1.75} aria-hidden="true" />
-          <span
-            aria-label="Unread notifications"
-            className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-            style={{ backgroundColor: "#E3A564", boxShadow: "0 0 0 2px #FBF8F6" }}
-          />
-        </button>
 
-        {/* Divider */}
-        <div className="w-px h-5" style={{ backgroundColor: "#F2E8E0" }} aria-hidden="true" />
 
         {/* Avatar + user */}
         <button
@@ -118,18 +108,6 @@ export default function TopHeader() {
                 fontWeight: 700,
                 fontFamily: "CabinetGrotesk, Impact, sans-serif",
                 color: "#000000",
-              }}
-            >
-              Kai Nakamura
-            </p>
-            <p
-              className="mt-0.5"
-              style={{
-                fontSize: "10px",
-                fontFamily: "Manrope, Arial, sans-serif",
-                color: "#94a3b8",
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
               }}
             >
               Admin
