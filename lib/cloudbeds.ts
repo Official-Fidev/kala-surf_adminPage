@@ -53,7 +53,7 @@ export async function fetchCloudbedsItems(): Promise<CloudbedsItem[]> {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    cache: "no-store",
+    next: { revalidate: 900 }, // Cache Cloudbeds items for 15 minutes
   });
 
   if (!res.ok) {

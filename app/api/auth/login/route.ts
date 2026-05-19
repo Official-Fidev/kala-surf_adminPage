@@ -1,12 +1,28 @@
 // app/api/auth/login/route.ts
 import { NextRequest } from "next/server";
-import { signToken, ADMIN_USERNAME, ADMIN_PASSWORD, COOKIE_NAME } from "@/lib/auth";
+import { signToken, ADMIN_USERNAME, ADMIN_PASSWORD_HASH, COOKIE_NAME } from "@/lib/auth";
+import bcrypt from "bcryptjs";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, password } = await request.json();
+    const body = await request.json();
+    const result = loginSchema.safeParse(body);
+    
+    if (!result.success) {
+      return Response.json({ success: false, message: "Invalid payload format" }, { status: 400 });
+    }
 
-    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
+    const { username, password } = result.data;
+
+    // Verify username and password hash
+    const isPasswordValid = bcrypt.compareSync(password, ADMIN_PASSWORD_HASH);
+    if (username !== ADMIN_USERNAME || !isPasswordValid) {
       return Response.json({ success: false, message: "Invalid credentials" }, { status: 401 });
     }
 

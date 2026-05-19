@@ -11,6 +11,7 @@ import { getAuthFromCookie } from "@/lib/auth";
 import { setOverride } from "@/lib/data";
 import fs from "fs";
 import path from "path";
+import sharp from "sharp";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 const ALLOWED    = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -39,11 +40,16 @@ export async function POST(
     );
   }
 
-  // Save file
+  // Save and compress file
   if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-  const ext      = file.name.split(".").pop() ?? "jpg";
-  const filename = `${id}.${ext}`;
-  fs.writeFileSync(path.join(UPLOAD_DIR, filename), Buffer.from(await file.arrayBuffer()));
+  const filename = `${id}.webp`;
+  const filePath = path.join(UPLOAD_DIR, filename);
+  
+  const buffer = Buffer.from(await file.arrayBuffer());
+  await sharp(buffer)
+    .resize({ width: 800, withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toFile(filePath);
 
   const imageUrl = `/uploads/${filename}`;
 

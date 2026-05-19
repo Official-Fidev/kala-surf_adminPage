@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 
 // ── Change these in production via environment variables ──────────
 export const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "kalasurf2024";
+// Default is bcrypt hash of "kalasurf2024"
+export const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || "$2b$10$wSrEbkDvihv/EqlV0u7sreF0uoLts.ru2JeQ9oceyKihIo6Im8dEq";
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "kala-surf-admin-secret-2024-must-change-in-prod"
 );
