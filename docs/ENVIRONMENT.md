@@ -8,6 +8,8 @@ This document provides a detailed reference for all environment variables used b
 | :-------------------- | :------- | :----------------- | :------------------------------------------------------------------------------------------------------------ |
 | `DATABASE_URL`        | Yes      | -                  | Full connection string for the PostgreSQL database.                                                           |
 | `JWT_SECRET`          | Yes      | -                  | A long, random string for signing authentication tokens. **Must be kept secret.**                             |
+| `ADMIN_USERNAME`      | No       | `admin`            | The username for the admin dashboard.                                                                         |
+| `ADMIN_PASSWORD_HASH` | No       | (hash of `kalasurf2024`) | The bcrypt hash of the admin password. Do not store plaintext passwords here.                                 |
 | `CLOUDBEDS_API_KEY`   | Yes      | -                  | Your API key for the Cloudbeds API.                                                                           |
 | `CLOUDBEDS_PROPERTY_ID`| Yes      | -                  | The ID of your property in Cloudbeds.                                                                         |
 | `NEXT_PUBLIC_APP_URL` | No       | `http://localhost:3000` | The public base URL of the application, used for generating links.                                              |
